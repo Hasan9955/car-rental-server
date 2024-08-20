@@ -15,8 +15,8 @@ const getUsers = catchAsync(async (req, res) => {
 
 
 const getSingleUser = catchAsync(async (req, res) =>{
-
-    const result = await userServices.getSingleUser()
+    const userId = req.params.id;
+    const result = await userServices.getSingleUser(userId)
     res.status(200).json({
         success: true,
         message: 'User retrieved successfully.',
@@ -37,8 +37,9 @@ const createUser = catchAsync(async (req, res) =>{
 
 
 const updateUser = catchAsync(async (req, res) =>{
-
-    const result = await userServices.updateUser()
+    const userId = req.params.id;
+    const payload = req.body;
+    const result = await userServices.updateUser(userId, payload)
     res.status(200).json({
         success: true,
         message: 'User updated successfully.',
