@@ -21,3 +21,6 @@ router.put('/return',
 router.patch('/update',
     validateRequest(bookingValidationSchema.updateBookingValidationSchema),
     bookingControllers.updateBooking)
+
+
+export const bookingRoutes = router;
