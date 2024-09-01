@@ -1,26 +1,14 @@
 import { model, Schema } from "mongoose";
-import { IName, IUser } from "./user.interface";
+import { IUser, IUserModel } from "./user.interface";
 import bcrypt from 'bcrypt';
 import config from "../../config";
 
-const nameSchema = new Schema<IName> ({
-    firstName: {
-        type: String,
-        required: true
-    },
-    middleName: {
-        type: String,
-    },
-    lastName: {
-        type: String,
-        required: true
-    },
-}, {
-    _id: false
-})
 
-const userSchema = new Schema<IUser>({
-    name: nameSchema,
+const userSchema = new Schema<IUser, IUserModel>({
+    name: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
         required: true,
@@ -36,7 +24,7 @@ const userSchema = new Schema<IUser>({
         enum: ['admin', 'user'],
         required: true
     },
-    contactNo: {
+    phone: {
         type: String,
         required: true
     },
@@ -44,7 +32,11 @@ const userSchema = new Schema<IUser>({
         type: String,
         required: true
     },
-},{
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
+}, {
     timestamps: true
 })
 
@@ -53,7 +45,7 @@ const userSchema = new Schema<IUser>({
 //Pre hook will work before saving our data
 userSchema.pre('save', async function (next) {
     const user = this;
-    user.password = await  bcrypt.hash(
+    user.password = await bcrypt.hash(
         user.password,
         Number(config.salt)
     )
@@ -63,10 +55,24 @@ userSchema.pre('save', async function (next) {
 
 //Post save middleware 
 //Post hook will work after saved our data
-userSchema.post('save', async function(doc, next){
+userSchema.post('save', async function (doc, next) {
     // console.log(this, 'Post hook we saved our data');
     doc.password = ''
     next();
 })
 
-export const User = model<IUser>('User', userSchema);
+
+//set statics function 
+userSchema.statics.isUserExists = async function (userEmail: string) {
+    return await User.findOne({
+        email: userEmail
+    }).select('+password')
+}
+
+userSchema.statics.isPasswordMatch = async function (plainTextPassword: string, hashPassword: string) {
+    return await bcrypt.compare(plainTextPassword, hashPassword)
+}
+
+
+
+export const User = model<IUser, IUserModel>('User', userSchema);
