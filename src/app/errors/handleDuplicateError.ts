@@ -3,11 +3,11 @@ import { TErrorSources, TGenericErrorResponse } from "../interface/error";
 
 const handleDuplicateError = (error: any): TGenericErrorResponse => {
 
-
+  
     const errorSources: TErrorSources = [
         {
             path: `${Object.keys(error?.keyValue)[0]}`,
-            message: `${error?.keyValue?.name} is already exists.`
+            message: `${Object.values(error?.keyValue)[0]} is already exists.`
         }
     ]
 
