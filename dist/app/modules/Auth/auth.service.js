@@ -30,6 +30,7 @@ const signIn = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         throw new AppError_1.default(403, 'Password does not match!');
     }
     const jwtPayload = {
+        userId: currentUser === null || currentUser === void 0 ? void 0 : currentUser._id,
         userEmail: currentUser === null || currentUser === void 0 ? void 0 : currentUser.email,
         role: currentUser === null || currentUser === void 0 ? void 0 : currentUser.role
     };

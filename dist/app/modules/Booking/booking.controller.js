@@ -17,11 +17,19 @@ const catchAsync_1 = __importDefault(require("../../utility/catchAsync"));
 const booking_service_1 = require("./booking.service");
 const getAllBookings = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = req.query;
-    console.log(query);
     const result = yield booking_service_1.bookingServices.getAllBookings(query);
     res.status(200).json({
         success: true,
         message: 'All bookings retrieved successfully.',
+        data: result
+    });
+}));
+const getUserBookings = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.user;
+    const result = yield booking_service_1.bookingServices.getUserBookings(userId);
+    res.status(200).json({
+        success: true,
+        message: 'My Bookings retrieved successfully.',
         data: result
     });
 }));
@@ -34,8 +42,9 @@ const getSingleBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 
     });
 }));
 const createBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.user;
     const payload = req.body;
-    const result = yield booking_service_1.bookingServices.createBooking(payload);
+    const result = yield booking_service_1.bookingServices.createBooking(payload, userId);
     res.status(200).json({
         success: true,
         message: 'Car booked successfully.',
@@ -63,6 +72,7 @@ const returnCar = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
 }));
 exports.bookingControllers = {
     getAllBookings,
+    getUserBookings,
     getSingleBooking,
     createBooking,
     updateBooking,
