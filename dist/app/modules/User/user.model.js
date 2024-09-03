@@ -16,23 +16,11 @@ exports.User = void 0;
 const mongoose_1 = require("mongoose");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const config_1 = __importDefault(require("../../config"));
-const nameSchema = new mongoose_1.Schema({
-    firstName: {
-        type: String,
-        required: true
-    },
-    middleName: {
-        type: String,
-    },
-    lastName: {
-        type: String,
-        required: true
-    },
-}, {
-    _id: false
-});
 const userSchema = new mongoose_1.Schema({
-    name: nameSchema,
+    name: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
         required: true,
@@ -48,7 +36,7 @@ const userSchema = new mongoose_1.Schema({
         enum: ['admin', 'user'],
         required: true
     },
-    contactNo: {
+    phone: {
         type: String,
         required: true
     },
@@ -56,6 +44,10 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true
 });
@@ -77,4 +69,17 @@ userSchema.post('save', function (doc, next) {
         next();
     });
 });
+//set statics function 
+userSchema.statics.isUserExists = function (userEmail) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield exports.User.findOne({
+            email: userEmail
+        }).select('+password');
+    });
+};
+userSchema.statics.isPasswordMatch = function (plainTextPassword, hashPassword) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield bcrypt_1.default.compare(plainTextPassword, hashPassword);
+    });
+};
 exports.User = (0, mongoose_1.model)('User', userSchema);

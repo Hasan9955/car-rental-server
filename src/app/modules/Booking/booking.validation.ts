@@ -2,28 +2,33 @@ import { Types } from "mongoose";
 import { z } from "zod";
 
 const timeStringSchema = z.string().refine((time) => {
-    const regex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    const regex = /^([01]?[0-9]|2[0-4]):[0-5][0-9]$/;
     return regex.test(time)
 }, {
     message: 'Invalid time formate, expected "HH:MM" in 24 hours formate.'
 })
+
+const dateStringSchema = z.string().refine((date) => {
+    const dateRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/
+    return dateRegex.test(date)
+}, {
+    message: 'Invalid date formate, expected formate "YYYY-MM-DD".'
+})
 const createBookingValidationSchema = z.object({
     body: z.object({
-        date: z.string().datetime(),
-        user: z.string(),
-        car: z.string(),
+        date: dateStringSchema, 
+        carId: z.string(),
         startTime: timeStringSchema,
-        endTime: timeStringSchema.default(''),
-        totalCost: z.number().default(0)
+        endTime: timeStringSchema.default('').optional(),
+        totalCost: z.number().default(0).optional()
     })
 })
 
 
 const updateBookingValidationSchema = z.object({
     body: z.object({
-        date: z.string().datetime().optional(),
-        user: z.string().optional(),
-        car: z.string().optional(),
+        date: dateStringSchema.optional(), 
+        carId: z.string().optional(),
         startTime: timeStringSchema.optional(),
         endTime: timeStringSchema.optional(),
         totalCost: z.number().optional()

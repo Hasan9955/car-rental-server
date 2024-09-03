@@ -10,7 +10,7 @@ const signIn = async (payload: {
     password: string;
 }) => {
 
-    const currentUser = await User.isUserExists(payload?.email) 
+    const currentUser = await User.isUserExists(payload?.email)
 
     if (!currentUser) {
         throw new AppError(404, 'This user dose not exists!')
@@ -22,12 +22,13 @@ const signIn = async (payload: {
 
     if (!isPasswordMatch) {
         throw new AppError(403, 'Password does not match!')
-    }
+    } 
 
     const jwtPayload = {
+        userId: currentUser?._id,
         userEmail: currentUser?.email,
         role: currentUser?.role
-    }
+    } 
 
     const accessToken = createToken(
         jwtPayload,

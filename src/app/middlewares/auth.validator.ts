@@ -5,7 +5,8 @@ import httpStatus from "http-status";
 import config from '../config';
 import { User } from '../modules/User/user.model';
 
-const authValidator = (...requiredRole: ['user' | 'admin']) => {
+type TRole = 'user' | 'admin'
+const authValidator = (...requiredRole: TRole[]) => {
     return catchAsync(async (req, res, next) => {
 
         const token = req.headers.authorization?.split(' ')?.[1]
@@ -20,7 +21,7 @@ const authValidator = (...requiredRole: ['user' | 'admin']) => {
         ) as JwtPayload;
 
 
-        req.user = decodedToken;
+        req.user = decodedToken; 
         const { userEmail, role, iat } = decodedToken;
         const currentUser = await User.isUserExists(userEmail)
 

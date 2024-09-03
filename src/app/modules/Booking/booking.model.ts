@@ -1,18 +1,20 @@
-import { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 import { IBooking } from "./booking.interface";
 
 
 const bookingSchema = new Schema<IBooking>({
     date: {
-        type: Date,
+        type: String,
         required: true
     },
     user: {
         type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     car: {
         type: Schema.Types.ObjectId,
+        ref: 'Car',
         required: true
     },
     startTime: {
@@ -27,4 +29,11 @@ const bookingSchema = new Schema<IBooking>({
         type: Number,
         default: 0
     },
+},
+{
+    timestamps: true
 })
+
+
+export const Booking = model<IBooking>('Booking', bookingSchema);
+
