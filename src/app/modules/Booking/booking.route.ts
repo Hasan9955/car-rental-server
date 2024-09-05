@@ -10,18 +10,13 @@ const router = Router();
 router.get('/', authValidator('admin'), bookingControllers.getAllBookings)
 
 router.get('/my-bookings', 
-    authValidator('user', 'admin'), 
+    authValidator('user'), 
     bookingControllers.getUserBookings)
 
 router.post('/',
-    authValidator('user', 'admin'),
+    authValidator('user'),
     validateRequest(bookingValidationSchema.createBookingValidationSchema),
     bookingControllers.createBooking)
-
-//return the car
-router.put('/return',
-    validateRequest(bookingValidationSchema.returnCarValidation),
-    bookingControllers.returnCar)
 
 router.patch('/update',
     validateRequest(bookingValidationSchema.updateBookingValidationSchema),

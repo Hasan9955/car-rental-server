@@ -1,5 +1,4 @@
-import catchAsync from "../../utility/catchAsync";
-import { IBooking } from "./booking.interface";
+import catchAsync from "../../utility/catchAsync"; 
 import { bookingServices } from "./booking.service";
 
 
@@ -12,7 +11,7 @@ const getAllBookings = catchAsync(async (req, res) => {
     })
     res.status(200).json({
         success: true,
-        message: 'All bookings retrieved successfully.',
+        message: 'Bookings retrieved successfully.',
         data: result
     })
 })

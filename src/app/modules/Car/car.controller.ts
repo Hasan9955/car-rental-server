@@ -24,7 +24,7 @@ const getSingleCar = catchAsync(async (req, res) =>{
 const createCar = catchAsync(async (req, res) =>{
     const payload = req.body;
     const result = await carServices.createCar(payload)
-    res.status(200).json({
+    res.status(201).json({
         success: true,
         message: 'Car created successfully.',
         data: result

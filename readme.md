@@ -2,9 +2,8 @@
 # Car-rental-server
 ## Live Link: https://car-rental-server-eight.vercel.app/
 
-
-
-![image](https://i.ibb.co/XkKtw26/190325-rental-cars-cs-229p.png)
+## Description: 
+Car rental server is a rental management app. Where a user can rent a car at any time, the admin can track the bookings. This will be very helpful for the general public. The rent cost will count by calculating the start time and end time. 
 
 # Used Technologies 
 ### 1. Express.js
