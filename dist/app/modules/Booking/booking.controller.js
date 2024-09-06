@@ -20,7 +20,7 @@ const getAllBookings = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
     const result = yield booking_service_1.bookingServices.getAllBookings(query);
     res.status(200).json({
         success: true,
-        message: 'All bookings retrieved successfully.',
+        message: 'Bookings retrieved successfully.',
         data: result
     });
 }));
@@ -61,20 +61,10 @@ const updateBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: result
     });
 }));
-const returnCar = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const payload = req.body;
-    const result = yield booking_service_1.bookingServices.returnCar(payload);
-    res.status(200).json({
-        success: true,
-        message: 'Car returned successfully.',
-        data: result
-    });
-}));
 exports.bookingControllers = {
     getAllBookings,
     getUserBookings,
     getSingleBooking,
     createBooking,
-    updateBooking,
-    returnCar
+    updateBooking
 };

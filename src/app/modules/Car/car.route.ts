@@ -15,15 +15,17 @@ router.get('/:id', carControllers.getSingleCar)
 
 router.post('/', authValidator('admin'), validateRequest(carValidationSchema.createCarValidationSchema), carControllers.createCar)
 
-router.put('/:id', authValidator('admin'), validateRequest(carValidationSchema.updateCarValidationSchema), carControllers.updateCar)
-
 router.delete('/:id', authValidator('admin'), carControllers.deleteCar)
 
 //return the car
 router.put('/return',
     authValidator('admin'),
     validateRequest(bookingValidationSchema.returnCarValidation),
-    bookingControllers.returnCar)
+    carControllers.returnCar)
+
+router.put('/:id', authValidator('admin'), validateRequest(carValidationSchema.updateCarValidationSchema), carControllers.updateCar)
+
+
 
 
 export const carRoutes = router;

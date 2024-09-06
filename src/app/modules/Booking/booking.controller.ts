@@ -61,15 +61,7 @@ const updateBooking = catchAsync(async (req, res) => {
     })
 })
 
-const returnCar = catchAsync(async (req, res) => {
-    const payload = req.body
-    const result = await bookingServices.returnCar(payload)
-    res.status(200).json({
-        success: true,
-        message: 'Car returned successfully.',
-        data: result
-    })
-})
+
 
 
 export const bookingControllers = {
@@ -77,6 +69,5 @@ export const bookingControllers = {
     getUserBookings,
     getSingleBooking,
     createBooking,
-    updateBooking,
-    returnCar
+    updateBooking
 }

@@ -32,6 +32,7 @@ const createCar = catchAsync(async (req, res) =>{
 })
 
 const updateCar = catchAsync(async (req, res) =>{
+    console.log('Hi here i am');
     const id = req.params.id;
     const payload = req.body;
     const result = await carServices.updateCar(id, payload)
@@ -52,11 +53,23 @@ const deleteCar = catchAsync(async (req, res) =>{
     })
 })
 
+const returnCar = catchAsync(async (req, res) => {
+    console.log("returned car");
+    const payload = req.body
+    const result = await carServices.returnCar(payload)
+    res.status(200).json({
+        success: true,
+        message: 'Car returned successfully.',
+        data: result
+    })
+})
+
 
 export const carControllers = {
     getAllCars,
     getSingleCar,
     createCar,
     updateCar,
-    deleteCar
+    deleteCar,
+    returnCar
 }

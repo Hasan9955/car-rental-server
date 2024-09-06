@@ -18,7 +18,6 @@ const car_model_1 = require("../Car/car.model");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const http_status_1 = __importDefault(require("http-status"));
 const booking_model_1 = require("./booking.model");
-const convertToHours_1 = require("../../utility/convertToHours");
 const getAllBookings = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const { carId, date } = query;
     if (carId && date) {
@@ -116,50 +115,10 @@ const updateBooking = (id, payload) => __awaiter(void 0, void 0, void 0, functio
     });
     return result;
 });
-const returnCar = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const id = payload.bookingId;
-    const isBookingExists = yield booking_model_1.Booking.findById(id)
-        .populate('user')
-        .populate('car');
-    if (!isBookingExists) {
-        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This booking id is not exists!');
-    }
-    const startTime = new Date(`1970-01-01T${isBookingExists.startTime}:00`);
-    const endTime = new Date(`1970-01-01T${payload.endTime}:00`);
-    if (startTime > endTime) {
-        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'End time can not less then start time.');
-    }
-    const startHours = (0, convertToHours_1.convertToHours)(isBookingExists.startTime);
-    const endHours = (0, convertToHours_1.convertToHours)(payload.endTime);
-    //calculate total cost
-    const pricePerHour = (_a = isBookingExists === null || isBookingExists === void 0 ? void 0 : isBookingExists.car) === null || _a === void 0 ? void 0 : _a.pricePerHour;
-    const totalCost = Number(((endHours - startHours) * pricePerHour).toFixed(2));
-    const updateCarStatus = yield car_model_1.Car.findByIdAndUpdate(isBookingExists.car._id, {
-        status: 'available'
-    }, {
-        runValidators: true,
-        new: true
-    });
-    const updateBooking = yield booking_model_1.Booking.findByIdAndUpdate(id, {
-        endTime: payload === null || payload === void 0 ? void 0 : payload.endTime,
-        totalCost
-    }, {
-        new: true,
-        runValidators: true
-    });
-    if (updateBooking) {
-        const result = yield booking_model_1.Booking.findById(updateBooking._id)
-            .populate('user')
-            .populate('car');
-        return result;
-    }
-});
 exports.bookingServices = {
     getAllBookings,
     getUserBookings,
     getSingleBooking,
     createBooking,
-    updateBooking,
-    returnCar
+    updateBooking
 };

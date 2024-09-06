@@ -35,13 +35,14 @@ const getSingleCar = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
 const createCar = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
     const result = yield car_service_1.carServices.createCar(payload);
-    res.status(200).json({
+    res.status(201).json({
         success: true,
         message: 'Car created successfully.',
         data: result
     });
 }));
 const updateCar = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('Hi here i am');
     const id = req.params.id;
     const payload = req.body;
     const result = yield car_service_1.carServices.updateCar(id, payload);
@@ -60,10 +61,21 @@ const deleteCar = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         data: result
     });
 }));
+const returnCar = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("returned car");
+    const payload = req.body;
+    const result = yield car_service_1.carServices.returnCar(payload);
+    res.status(200).json({
+        success: true,
+        message: 'Car returned successfully.',
+        data: result
+    });
+}));
 exports.carControllers = {
     getAllCars,
     getSingleCar,
     createCar,
     updateCar,
-    deleteCar
+    deleteCar,
+    returnCar
 };
