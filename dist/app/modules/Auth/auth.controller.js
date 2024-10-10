@@ -31,6 +31,33 @@ const signIn = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0,
         token: accessToken
     });
 }));
+const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { refreshToken } = req.cookies;
+    const result = yield auth_service_1.authServices.refreshToken(refreshToken);
+    res.status(200).json({
+        success: true,
+        message: 'Token retrieved Successfully.',
+        data: result
+    });
+}));
+const forgetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield auth_service_1.authServices.forgetPassword(req.body.email);
+    res.status(200).json({
+        success: true,
+        message: 'Token retrieved successfully.',
+        data: result
+    });
+}));
+const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield auth_service_1.authServices.resetPassword(req.body);
+    res.status(200).json({
+        success: true,
+        message: 'Password reset successfully.',
+        data: result
+    });
+}));
 exports.authControllers = {
     signIn,
+    forgetPassword,
+    resetPassword
 };

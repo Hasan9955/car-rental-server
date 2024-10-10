@@ -22,9 +22,13 @@ const userSchema = new Schema<IUser, IUserModel>({
     role: {
         type: String,
         enum: ['admin', 'user'],
-        required: true
+        default: 'user'
     },
     phone: {
+        type: String,
+        required: true
+    },
+    photo: {
         type: String,
         required: true
     },

@@ -13,8 +13,9 @@ router.get('/:id', userControllers.getSingleUser)
 
 router.post('/create-user', validateRequest(userValidation.createUserValidationSchema), userControllers.createUser)
 
-router.patch('/update-user/:id', validateRequest(userValidation.updateUserValidationSchema), userControllers.updateUser)
+router.put('/:id', validateRequest(userValidation.updateUserValidationSchema), userControllers.updateUser)
 
+router.delete('/:id', userControllers.deleteUser)
 
 
 export const userRoutes = router;

@@ -12,7 +12,7 @@ const allRoutes = [
         route: authRoutes
     },
     {
-        path: '/user',
+        path: '/users',
         route: userRoutes
     },
     {

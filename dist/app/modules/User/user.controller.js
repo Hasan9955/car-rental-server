@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userControllers = void 0;
+const config_1 = __importDefault(require("../../config"));
 const catchAsync_1 = __importDefault(require("../../utility/catchAsync"));
 const user_service_1 = require("./user.service");
 const getUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -34,10 +35,17 @@ const getSingleUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
 }));
 const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.userServices.createUser(req.body);
+    const { userData, accessToken, refreshToken } = result;
+    //save the refreshToken in the cookie
+    res.cookie('refreshToken', refreshToken, {
+        secure: config_1.default.node_env === 'production',
+        httpOnly: true
+    });
     res.status(201).json({
         success: true,
         message: 'User registered successfully.',
-        data: result
+        data: userData,
+        token: accessToken
     });
 }));
 const updateUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -50,9 +58,19 @@ const updateUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         data: result
     });
 }));
+const deleteUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.params.id;
+    const result = yield user_service_1.userServices.deleteUser(userId);
+    res.status(200).json({
+        success: true,
+        message: 'User deleted successfully.',
+        data: result
+    });
+}));
 exports.userControllers = {
     getUsers,
     getSingleUser,
     createUser,
-    updateUser
+    updateUser,
+    deleteUser
 };

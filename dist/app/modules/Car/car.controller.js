@@ -42,7 +42,6 @@ const createCar = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
     });
 }));
 const updateCar = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('Hi here i am');
     const id = req.params.id;
     const payload = req.body;
     const result = yield car_service_1.carServices.updateCar(id, payload);

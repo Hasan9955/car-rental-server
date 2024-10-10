@@ -15,6 +15,10 @@ const carSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
+    photo: {
+        type: String,
+        required: true
+    },
     isElectric: {
         type: Boolean,
         required: true

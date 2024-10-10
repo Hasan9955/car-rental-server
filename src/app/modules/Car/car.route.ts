@@ -4,26 +4,26 @@ import validateRequest from "../../middlewares/validate.request";
 import { carValidationSchema } from "./car.validation";
 import authValidator from "../../middlewares/auth.validator";
 import { bookingValidationSchema } from "../Booking/booking.validation";
-import { bookingControllers } from "../Booking/booking.controller";
+// import { bookingControllers } from "../Booking/booking.controller";
 
 
 const router = Router();
 
-router.get('/', carControllers.getAllCars)
+router.get('/', authValidator('admin', 'user'), carControllers.getAllCars)
 
 router.get('/:id', carControllers.getSingleCar)
 
-router.post('/', authValidator('admin'), validateRequest(carValidationSchema.createCarValidationSchema), carControllers.createCar)
+router.post('/', authValidator('admin', 'user'), validateRequest(carValidationSchema.createCarValidationSchema), carControllers.createCar)
 
-router.delete('/:id', authValidator('admin'), carControllers.deleteCar)
+router.delete('/:id', authValidator('admin', 'user'), carControllers.deleteCar)
 
 //return the car
 router.put('/return',
-    authValidator('admin'),
+    authValidator('admin', 'user'),
     validateRequest(bookingValidationSchema.returnCarValidation),
     carControllers.returnCar)
 
-router.put('/:id', authValidator('admin'), validateRequest(carValidationSchema.updateCarValidationSchema), carControllers.updateCar)
+router.put('/:id', authValidator('admin', 'user'), validateRequest(carValidationSchema.updateCarValidationSchema), carControllers.updateCar)
 
 
 

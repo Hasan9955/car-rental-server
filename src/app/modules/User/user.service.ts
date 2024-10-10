@@ -1,3 +1,5 @@
+import config from "../../config";
+import { createToken } from "../Auth/auth.utils";
 import { IUser } from "./user.interface"
 import { User } from "./user.model"
 import merge from 'lodash.merge'
@@ -16,7 +18,33 @@ const getSingleUser = async (id: string) => {
 
 const createUser = async (payload: IUser) => {
     const result = await User.create(payload)
-    return result;
+
+    const jwtPayload = {
+        userId: result?._id.toString(),
+        userEmail: result?.email,
+        name: result?.name,
+        photo: result?.photo,
+        role: result?.role
+    } 
+    
+    const accessToken = createToken(
+        jwtPayload,
+        config.jwt_access_secret as string,
+        config.jwt_access_expire_time as string
+    )
+
+    const refreshToken = createToken(
+        jwtPayload,
+        config.jwt_refresh_secret as string,
+        config.jwt_refresh_expire_time as string
+    )
+    console.log(jwtPayload, accessToken, refreshToken);
+
+    return {
+        userData: result,
+        accessToken,
+        refreshToken
+    };
 }
 
 const updateUser = async (id: string, payload: Partial<IUser>) => {
@@ -37,9 +65,16 @@ const updateUser = async (id: string, payload: Partial<IUser>) => {
 }
 
 
+const deleteUser = async (id: string) => {
+    const result = await User.findByIdAndDelete(id)
+    return result
+}
+
+
 export const userServices = {
     getUsers,
     getSingleUser, 
     createUser,
-    updateUser
+    updateUser,
+    deleteUser
 }

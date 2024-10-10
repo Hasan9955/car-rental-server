@@ -10,6 +10,7 @@ exports.default = {
     mongo_url: process.env.MONGODB_URL,
     node_env: process.env.NODE_ENV,
     port: process.env.PORT,
+    ui_link: process.env.UI_LINK,
     salt: process.env.BCRYPT_SALT,
     jwt_access_secret: process.env.JWT_ACCESS_SECRET,
     jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,

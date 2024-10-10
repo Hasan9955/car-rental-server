@@ -12,5 +12,6 @@ const router = (0, express_1.Router)();
 router.get('/', user_controller_1.userControllers.getUsers);
 router.get('/:id', user_controller_1.userControllers.getSingleUser);
 router.post('/create-user', (0, validate_request_1.default)(user_validation_1.userValidation.createUserValidationSchema), user_controller_1.userControllers.createUser);
-router.patch('/update-user/:id', (0, validate_request_1.default)(user_validation_1.userValidation.updateUserValidationSchema), user_controller_1.userControllers.updateUser);
+router.put('/:id', (0, validate_request_1.default)(user_validation_1.userValidation.updateUserValidationSchema), user_controller_1.userControllers.updateUser);
+router.delete('/:id', user_controller_1.userControllers.deleteUser);
 exports.userRoutes = router;

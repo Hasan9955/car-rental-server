@@ -1,24 +1,13 @@
-import { z } from "zod";
-
-
-// const NameValidationSchema = z.object({
-//     firstName: z.string({
-//         required_error: 'First name is required.'
-//     }),
-//     middleName: z.string().optional(),
-//     lastName: z.string({
-//         required_error: 'Last name is required.'
-//     })
-// })
- 
+import { z } from "zod"; 
 
 const createUserValidationSchema = z.object({
     body: z.object({
         name: z.string(),
         email: z.string(),
         password: z.string().min(6, {message: 'Password should be minimum 6 character.'}).max(20, { message: 'password can not be more then 20 character' }),
-        role: z.enum(['admin', 'user']),
+        role: z.enum(['admin', 'user']).optional(),
         phone: z.string(),
+        photo: z.string().default('https://i.ibb.co.com/5j6sv2R/anonymous2.webp'),
         address: z.string(),
         isDeleted: z.boolean().default(false)
     })

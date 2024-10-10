@@ -15,6 +15,7 @@ export interface IUser {
     password: string;
     role: 'admin' | 'user';
     phone: string;
+    photo: string;
     address: string;
     isDeleted: boolean;
 }

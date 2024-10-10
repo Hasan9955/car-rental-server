@@ -16,6 +16,10 @@ const carSchema = new Schema<ICar>({
         type: String,
         required: true
     },
+    photo: {
+        type: String,
+        required: true
+    },
     isElectric: {
         type: Boolean,
         required: true

@@ -34,9 +34,13 @@ const userSchema = new mongoose_1.Schema({
     role: {
         type: String,
         enum: ['admin', 'user'],
-        required: true
+        default: 'user'
     },
     phone: {
+        type: String,
+        required: true
+    },
+    photo: {
         type: String,
         required: true
     },

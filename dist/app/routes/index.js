@@ -15,7 +15,7 @@ const allRoutes = [
         route: auth_route_1.authRoutes
     },
     {
-        path: '/user',
+        path: '/users',
         route: user_route_1.userRoutes
     },
     {

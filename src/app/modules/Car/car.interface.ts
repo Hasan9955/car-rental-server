@@ -2,6 +2,7 @@
 
 export interface ICar {
     name: string;
+    photo: string;
     description: string;
     color: string;
     isElectric: boolean;

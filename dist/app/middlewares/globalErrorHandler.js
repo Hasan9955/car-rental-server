@@ -73,7 +73,8 @@ const globalErrorHandler = (error, req, res, next) => {
         success: false,
         message,
         errorMessages: errorSources,
-        stack: config_1.default.node_env === 'development' ? error === null || error === void 0 ? void 0 : error.stack : null
+        stack: config_1.default.node_env === 'development' ? error === null || error === void 0 ? void 0 : error.stack : null,
+        error,
     });
 };
 exports.default = globalErrorHandler;
