@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({ 
-  origin: 'https://car-swift-client.vercel.app/',
+  origin: 'https://car-swift-client.vercel.app',
   credentials: true
  }))
 
