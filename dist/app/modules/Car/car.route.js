@@ -12,7 +12,7 @@ const auth_validator_1 = __importDefault(require("../../middlewares/auth.validat
 const booking_validation_1 = require("../Booking/booking.validation");
 // import { bookingControllers } from "../Booking/booking.controller";
 const router = (0, express_1.Router)();
-router.get('/', (0, auth_validator_1.default)('admin', 'user'), car_controller_1.carControllers.getAllCars);
+router.get('/', car_controller_1.carControllers.getAllCars);
 router.get('/:id', car_controller_1.carControllers.getSingleCar);
 router.post('/', (0, auth_validator_1.default)('admin', 'user'), (0, validate_request_1.default)(car_validation_1.carValidationSchema.createCarValidationSchema), car_controller_1.carControllers.createCar);
 router.delete('/:id', (0, auth_validator_1.default)('admin', 'user'), car_controller_1.carControllers.deleteCar);

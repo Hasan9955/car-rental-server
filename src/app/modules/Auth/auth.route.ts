@@ -18,8 +18,7 @@ router.post('/login',
     authControllers.signIn)
 
 router.post('/refresh-token', 
-    validateRequest(refreshTokenValidationSchema), 
-    authControllers.signIn)
+    authControllers.refreshToken)
 
 router.post('/forgetPassword', validateRequest(forgetPasswordValidation), authControllers.forgetPassword)
 

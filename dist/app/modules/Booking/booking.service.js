@@ -66,7 +66,7 @@ const getSingleBooking = (id) => __awaiter(void 0, void 0, void 0, function* () 
 });
 const createBooking = (payload, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const bookingData = {
-        car: payload.carId,
+        car: payload.car,
         startTime: payload.startTime,
         date: payload.date,
         user: userId,

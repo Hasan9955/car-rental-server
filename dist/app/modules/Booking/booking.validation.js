@@ -17,6 +17,9 @@ const dateStringSchema = zod_1.z.string().refine((date) => {
 const createBookingValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         date: dateStringSchema,
+        prickUp: zod_1.z.string(),
+        dropOff: zod_1.z.string(),
+        userId: zod_1.z.string(),
         carId: zod_1.z.string(),
         startTime: timeStringSchema,
         endTime: timeStringSchema.default('').optional(),
@@ -26,6 +29,9 @@ const createBookingValidationSchema = zod_1.z.object({
 const updateBookingValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         date: dateStringSchema.optional(),
+        prickUp: zod_1.z.string().optional(),
+        dropOff: zod_1.z.string().optional(),
+        userId: zod_1.z.string().optional(),
         carId: zod_1.z.string().optional(),
         startTime: timeStringSchema.optional(),
         endTime: timeStringSchema.optional(),

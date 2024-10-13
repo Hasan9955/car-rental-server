@@ -66,7 +66,7 @@ const getSingleBooking = async (id: string) => {
 
 const createBooking = async (payload: IBooking, userId: string) => {
     const bookingData = {
-        car: payload.carId,
+        car: payload.car,
         startTime: payload.startTime,
         date: payload.date,
         user: userId,

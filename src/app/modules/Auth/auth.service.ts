@@ -56,7 +56,7 @@ const signIn = async (payload: {
 }
 
 
-const refreshToken = async (token: string) => {
+const refreshToken = async (token: string) => { 
     if (!token) {
         throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!')
     } 

@@ -9,7 +9,7 @@ import { bookingValidationSchema } from "../Booking/booking.validation";
 
 const router = Router();
 
-router.get('/', authValidator('admin', 'user'), carControllers.getAllCars)
+router.get('/', carControllers.getAllCars)
 
 router.get('/:id', carControllers.getSingleCar)
 

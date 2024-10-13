@@ -2,12 +2,13 @@ import { Router } from "express";
 import { userControllers } from "./user.controller";
 import validateRequest from "../../middlewares/validate.request";
 import { userValidation } from "./user.validation";
+import authValidator from "../../middlewares/auth.validator";
 
 
 const router = Router();
 
 
-router.get('/', userControllers.getUsers)
+router.get('/', authValidator('admin'), userControllers.getUsers)
 
 router.get('/:id', userControllers.getSingleUser)
 
