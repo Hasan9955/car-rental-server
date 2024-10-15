@@ -9,18 +9,23 @@ const router = Router();
 
 router.get('/', authValidator('admin'), bookingControllers.getAllBookings)
 
-router.get('/my-bookings', 
-    authValidator('user'), 
+router.get('/my-bookings',
+    authValidator('user', 'admin'),
     bookingControllers.getUserBookings)
 
 router.post('/',
-    authValidator('user'),
+    authValidator('user', 'admin'),
     validateRequest(bookingValidationSchema.createBookingValidationSchema),
     bookingControllers.createBooking)
 
 router.patch('/update',
+    authValidator('admin', 'user'),
     validateRequest(bookingValidationSchema.updateBookingValidationSchema),
     bookingControllers.updateBooking)
 
+router.delete('/:id',
+    authValidator('admin', 'user'),
+    bookingControllers.deleteBooking
+)
 
 export const bookingRoutes = router;

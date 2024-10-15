@@ -16,11 +16,9 @@ const dateStringSchema = z.string().refine((date) => {
 })
 const createBookingValidationSchema = z.object({
     body: z.object({
-        date: dateStringSchema, 
-        prickUp: z.string(),
-        dropOff: z.string(),
-        userId: z.string(),
-        carId: z.string(),
+        date: dateStringSchema,  
+        user: z.string(),
+        car: z.string(),
         startTime: timeStringSchema,
         endTime: timeStringSchema.default('').optional(),
         totalCost: z.number().default(0).optional()

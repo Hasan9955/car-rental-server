@@ -5,27 +5,40 @@ import { Booking } from "../Booking/booking.model";
 import { convertToHours } from "../../utility/convertToHours";
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
+import { Query } from "./car.controller";
+import { Types } from "mongoose";
 
 
-const getAllCars = async () =>{
-    const result = await Car.find();
+const getAllCars = async (payload: Query) => { 
+    
+    let unavailableCarIds: Types.ObjectId[] = [];
+    
+    if (payload.date) {
+        const bookings = await Booking.find({ date: payload.date }); 
+        unavailableCarIds = bookings.map((booking) => booking.car);
+    }
+
+    const result = await Car.find({
+        _id: { $nin: unavailableCarIds },
+    });
+
     return result;
 }
 
 
-const getSingleCar = async (id: string) =>{
+const getSingleCar = async (id: string) => {
     const result = await Car.findById(id)
     return result;
 }
 
 
-const createCar = async (payload: ICar) =>{
+const createCar = async (payload: ICar) => {
     const result = await Car.create(payload)
     return result;
 }
 
 
-const updateCar = async (id: string, payload: Partial<ICar>) =>{
+const updateCar = async (id: string, payload: Partial<ICar>) => {
 
     const requestedCar = await Car.findById(id)
     const mergedData = merge(requestedCar, payload)
@@ -40,7 +53,7 @@ const updateCar = async (id: string, payload: Partial<ICar>) =>{
     return result;
 }
 
-const deleteCar = async (id: string) =>{
+const deleteCar = async (id: string) => {
     const result = await Car.findByIdAndUpdate(
         id,
         {

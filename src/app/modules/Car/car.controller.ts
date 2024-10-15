@@ -1,9 +1,13 @@
 import catchAsync from "../../utility/catchAsync";
 import { carServices } from "./car.service";
 
-
+export interface Query {
+    date: string;
+    startTime: string;
+}
 const getAllCars = catchAsync(async (req, res) =>{
-    const result = await carServices.getAllCars()
+    const query = req.query as unknown as Query;
+    const result = await carServices.getAllCars(query)
     res.status(200).json({
         success: true,
         message: 'All Cars retrieved successfully.',

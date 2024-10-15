@@ -93,6 +93,12 @@ const createBooking = async (payload: IBooking, userId: string) => {
         throw new AppError(httpStatus.BAD_REQUEST, 'You can not set date bigger then 1 year!')
     }
 
+    const isBookingAlreadyExists = await Booking.findOne({ car: payload.car })
+
+    if (isBookingAlreadyExists?.date === payload.date) {
+        throw new AppError(httpStatus.BAD_REQUEST, 'This car is already booked for requested day!')
+    }
+
 
     const updateCarStatus = await Car.findByIdAndUpdate(
         bookingData.car,
@@ -141,6 +147,12 @@ const updateBooking = async (
 }
 
 
+const deleteBooking = async (id: string) =>{ 
+    const result = await Booking.findByIdAndDelete(id)
+    return result;
+}
+
+
 
 
 
@@ -149,5 +161,6 @@ export const bookingServices = {
     getUserBookings,
     getSingleBooking,
     createBooking,
-    updateBooking
+    updateBooking,
+    deleteBooking
 }
