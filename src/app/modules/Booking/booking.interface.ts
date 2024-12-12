@@ -7,5 +7,7 @@ export interface IBooking {
     user: Types.ObjectId; 
     startTime: string;
     endTime: string;
+    transactionId: string;
+    status: 'PENDING' | 'APPROVED' | 'UNPAID' | 'PAID';
     totalCost: number;
 }

@@ -18,8 +18,14 @@ const car_model_1 = require("../Car/car.model");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const http_status_1 = __importDefault(require("http-status"));
 const booking_model_1 = require("./booking.model");
+const config_1 = __importDefault(require("../../config"));
+const stripe = require('stripe')(config_1.default.strip_key);
 const getAllBookings = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const { carId, date } = query;
+    const { carId, date, status } = query;
+    let statusArray = null;
+    if (status) {
+        statusArray = status.split('-');
+    }
     if (carId && date) {
         const result = yield booking_model_1.Booking.find({
             car: carId,
@@ -45,14 +51,26 @@ const getAllBookings = (query) => __awaiter(void 0, void 0, void 0, function* ()
             .populate('car');
         return result ? result : 'No booking matched with this Date.';
     }
-    const result = yield booking_model_1.Booking.find()
+    const result = yield booking_model_1.Booking.find({
+        status: { $nin: statusArray }
+    }).sort({
+        createdAt: -1
+    })
         .populate('user')
         .populate('car');
     return result;
 });
-const getUserBookings = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserBookings = (userId, query) => __awaiter(void 0, void 0, void 0, function* () {
+    const queryValue = query.query;
+    let queryArray = null;
+    if (queryValue) {
+        queryArray = queryValue.split('-');
+    }
     const result = yield booking_model_1.Booking.find({
-        user: userId
+        user: userId,
+        status: { $nin: queryArray }
+    }).sort({
+        createdAt: -1
     })
         .populate('user')
         .populate('car');
@@ -85,6 +103,10 @@ const createBooking = (payload, userId) => __awaiter(void 0, void 0, void 0, fun
     if (inputDate > oneYearFromToday) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'You can not set date bigger then 1 year!');
     }
+    const isBookingAlreadyExists = yield booking_model_1.Booking.findOne({ car: payload.car });
+    if ((isBookingAlreadyExists === null || isBookingAlreadyExists === void 0 ? void 0 : isBookingAlreadyExists.date) === payload.date) {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'This car is already booked for requested day!');
+    }
     const updateCarStatus = yield car_model_1.Car.findByIdAndUpdate(bookingData.car, {
         status: 'unavailable'
     }, {
@@ -115,10 +137,27 @@ const updateBooking = (id, payload) => __awaiter(void 0, void 0, void 0, functio
     });
     return result;
 });
+const deleteBooking = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield booking_model_1.Booking.findByIdAndDelete(id);
+    return result;
+});
+const createPaymentIntent = (price) => __awaiter(void 0, void 0, void 0, function* () {
+    const amount = parseInt((price * 100).toString());
+    const paymentIntent = yield stripe.paymentIntents.create({
+        amount: amount,
+        currency: "usd",
+        payment_method_types: ['card']
+    });
+    return {
+        clientSecret: paymentIntent.client_secret
+    };
+});
 exports.bookingServices = {
     getAllBookings,
     getUserBookings,
     getSingleBooking,
     createBooking,
-    updateBooking
+    updateBooking,
+    deleteBooking,
+    createPaymentIntent
 };

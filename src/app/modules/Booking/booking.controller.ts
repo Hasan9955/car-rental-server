@@ -1,4 +1,4 @@
-import catchAsync from "../../utility/catchAsync"; 
+import catchAsync from "../../utility/catchAsync";
 import { bookingServices } from "./booking.service";
 
 
@@ -8,6 +8,7 @@ const getAllBookings = catchAsync(async (req, res) => {
     const result = await bookingServices.getAllBookings(query as {
         carId: string;
         date: string;
+        status: string;
     })
     res.status(200).json({
         success: true,
@@ -17,8 +18,9 @@ const getAllBookings = catchAsync(async (req, res) => {
 })
 
 const getUserBookings = catchAsync(async (req, res) => {
+    const query = req.query;
     const { userId } = req.user;
-    const result = await bookingServices.getUserBookings(userId);
+    const result = await bookingServices.getUserBookings(userId, query);
     res.status(200).json({
         success: true,
         message: 'My Bookings retrieved successfully.',
@@ -31,7 +33,7 @@ const getSingleBooking = catchAsync(async (req, res) => {
     const result = await bookingServices.getSingleBooking(req.params.id)
     res.status(200).json({
         success: true,
-        message: 'My Bookings retrieved successfully.',
+        message: 'Booking retrieved successfully.',
         data: result
     })
 })
@@ -71,6 +73,17 @@ const updateBooking = catchAsync(async (req, res) => {
 })
 
 
+const createPaymentIntent = catchAsync(async (req, res) => {
+    const { price } = req.body;
+    const result = await bookingServices.createPaymentIntent(price)
+    res.status(200).json({
+        success: true,
+        message: 'Payment intent created successfully!',
+        data: result
+    })
+})
+
+
 
 
 export const bookingControllers = {
@@ -79,5 +92,6 @@ export const bookingControllers = {
     getSingleBooking,
     createBooking,
     updateBooking,
-    deleteBooking
+    deleteBooking,
+    createPaymentIntent
 }

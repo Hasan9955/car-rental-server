@@ -25,8 +25,9 @@ const getAllBookings = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
     });
 }));
 const getUserBookings = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = req.query;
     const { userId } = req.user;
-    const result = yield booking_service_1.bookingServices.getUserBookings(userId);
+    const result = yield booking_service_1.bookingServices.getUserBookings(userId, query);
     res.status(200).json({
         success: true,
         message: 'My Bookings retrieved successfully.',
@@ -37,7 +38,15 @@ const getSingleBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 
     const result = yield booking_service_1.bookingServices.getSingleBooking(req.params.id);
     res.status(200).json({
         success: true,
-        message: 'My Bookings retrieved successfully.',
+        message: 'Booking retrieved successfully.',
+        data: result
+    });
+}));
+const deleteBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield booking_service_1.bookingServices.deleteBooking(req.params.id);
+    res.status(200).json({
+        success: true,
+        message: 'Booking deleted successfully.',
         data: result
     });
 }));
@@ -61,10 +70,21 @@ const updateBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: result
     });
 }));
+const createPaymentIntent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { price } = req.body;
+    const result = yield booking_service_1.bookingServices.createPaymentIntent(price);
+    res.status(200).json({
+        success: true,
+        message: 'Payment intent created successfully!',
+        data: result
+    });
+}));
 exports.bookingControllers = {
     getAllBookings,
     getUserBookings,
     getSingleBooking,
     createBooking,
-    updateBooking
+    updateBooking,
+    deleteBooking,
+    createPaymentIntent
 };

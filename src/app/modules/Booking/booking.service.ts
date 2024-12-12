@@ -1,19 +1,24 @@
 import merge from "lodash.merge";
-import { ICar } from "../Car/car.interface";
 import { Car } from "../Car/car.model"
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
 import { Booking } from "./booking.model";
 import { IBooking } from "./booking.interface";
-import { convertToHours } from "../../utility/convertToHours";
-
+import config from "../../config";
+const stripe = require('stripe')(config.strip_key)
 
 const getAllBookings = async (query: {
     carId: string;
     date: string;
+    status: string;
 }) => {
 
-    const { carId, date } = query;
+    const { carId, date, status } = query; 
+    let statusArray = null;
+    if (status) {
+        statusArray = status.split('-')
+    }
+    
     if (carId && date) {
         const result = await Booking.find({
             car: carId,
@@ -23,6 +28,7 @@ const getAllBookings = async (query: {
             .populate('car')
         return result ? result : 'No booking matched with this query.';
     }
+
     if (carId) {
         const result = await Booking.find({
             car: carId
@@ -41,15 +47,29 @@ const getAllBookings = async (query: {
     }
 
 
-    const result = await Booking.find()
+    const result = await Booking.find({
+        status: { $nin: statusArray }
+    }).sort({
+        createdAt: -1
+    })
         .populate('user')
         .populate('car');
     return result;
 }
 
-const getUserBookings = async (userId: string) => {
+const getUserBookings = async (userId: string, query: any) => {
+
+    const queryValue = query.query;
+    let queryArray = null;
+    if (queryValue) {
+        queryArray = queryValue.split('-');
+    }
+
     const result = await Booking.find({
-        user: userId
+        user: userId,
+        status: { $nin: queryArray }
+    }).sort({
+        createdAt: -1
     })
         .populate('user')
         .populate('car')
@@ -147,9 +167,27 @@ const updateBooking = async (
 }
 
 
-const deleteBooking = async (id: string) =>{ 
+const deleteBooking = async (id: string) => {
     const result = await Booking.findByIdAndDelete(id)
     return result;
+}
+
+
+const createPaymentIntent = async (price: number) => {
+ 
+    const amount = parseInt((price * 100).toString());
+  
+
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: "usd",
+        payment_method_types: ['card']
+      });
+
+    return {
+        clientSecret: paymentIntent.client_secret
+    }
+    
 }
 
 
@@ -162,5 +200,6 @@ export const bookingServices = {
     getSingleBooking,
     createBooking,
     updateBooking,
-    deleteBooking
+    deleteBooking,
+    createPaymentIntent
 }

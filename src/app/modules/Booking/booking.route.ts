@@ -13,12 +13,16 @@ router.get('/my-bookings',
     authValidator('user', 'admin'),
     bookingControllers.getUserBookings)
 
+router.get('/:id', 
+    authValidator('user', 'admin'),
+    bookingControllers.getSingleBooking);
+
 router.post('/',
     authValidator('user', 'admin'),
     validateRequest(bookingValidationSchema.createBookingValidationSchema),
     bookingControllers.createBooking)
 
-router.patch('/update',
+router.put('/:id',
     authValidator('admin', 'user'),
     validateRequest(bookingValidationSchema.updateBookingValidationSchema),
     bookingControllers.updateBooking)
@@ -27,5 +31,9 @@ router.delete('/:id',
     authValidator('admin', 'user'),
     bookingControllers.deleteBooking
 )
+
+// payment route 
+
+router.post('/create-payment-intent', bookingControllers.createPaymentIntent)
 
 export const bookingRoutes = router;

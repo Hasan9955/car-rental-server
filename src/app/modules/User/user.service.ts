@@ -38,7 +38,7 @@ const createUser = async (payload: IUser) => {
         config.jwt_refresh_secret as string,
         config.jwt_refresh_expire_time as string
     )
-    console.log(jwtPayload, accessToken, refreshToken);
+    // console.log(jwtPayload, accessToken, refreshToken);
 
     return {
         userData: result,

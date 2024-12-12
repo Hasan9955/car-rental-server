@@ -19,8 +19,15 @@ const booking_model_1 = require("../Booking/booking.model");
 const convertToHours_1 = require("../../utility/convertToHours");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const http_status_1 = __importDefault(require("http-status"));
-const getAllCars = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield car_model_1.Car.find();
+const getAllCars = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    let unavailableCarIds = [];
+    if (payload.date) {
+        const bookings = yield booking_model_1.Booking.find({ date: payload.date });
+        unavailableCarIds = bookings.map((booking) => booking.car);
+    }
+    const result = yield car_model_1.Car.find({
+        _id: { $nin: unavailableCarIds },
+    });
     return result;
 });
 const getSingleCar = (id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -53,13 +60,20 @@ const deleteCar = (id) => __awaiter(void 0, void 0, void 0, function* () {
 const returnCar = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const id = payload.bookingId;
-    console.log(id);
     const isBookingExists = yield booking_model_1.Booking.findById(id)
         .populate('user')
         .populate('car');
     if (!isBookingExists) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This booking id is not exists!');
     }
+    const bookingDate = new Date(isBookingExists.date);
+    const todayDate = new Date();
+    // make those date variables 00 time
+    bookingDate.setHours(0, 0, 0, 0);
+    todayDate.setHours(0, 0, 0, 0);
+    // if (bookingDate > todayDate) {
+    //     throw new AppError(httpStatus.BAD_REQUEST, "You can't return the car for an upcoming date.");
+    // }
     const startTime = new Date(`1970-01-01T${isBookingExists.startTime}:00`);
     const endTime = new Date(`1970-01-01T${payload.endTime}:00`);
     if (startTime > endTime) {
@@ -78,7 +92,8 @@ const returnCar = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     });
     const updateBooking = yield booking_model_1.Booking.findByIdAndUpdate(id, {
         endTime: payload === null || payload === void 0 ? void 0 : payload.endTime,
-        totalCost
+        totalCost,
+        status: 'UNPAID'
     }, {
         new: true,
         runValidators: true

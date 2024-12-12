@@ -1,4 +1,3 @@
-import { Types } from "mongoose";
 import { z } from "zod";
 
 const timeStringSchema = z.string().refine((time) => {
@@ -19,6 +18,7 @@ const createBookingValidationSchema = z.object({
         date: dateStringSchema,  
         user: z.string(),
         car: z.string(),
+        status: z.enum(['PENDING', 'APPROVED', 'UNPAID', 'PAID']).default('PENDING'),
         startTime: timeStringSchema,
         endTime: timeStringSchema.default('').optional(),
         totalCost: z.number().default(0).optional()
@@ -33,6 +33,8 @@ const updateBookingValidationSchema = z.object({
         dropOff: z.string().optional(),
         userId: z.string().optional(),
         carId: z.string().optional(),
+        transactionId: z.string().optional(),
+        status: z.enum(['PENDING', 'APPROVED', 'UNPAID', 'PAID']).optional(),
         startTime: timeStringSchema.optional(),
         endTime: timeStringSchema.optional(),
         totalCost: z.number().optional()

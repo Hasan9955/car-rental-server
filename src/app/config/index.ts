@@ -14,7 +14,7 @@ export default {
     jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,
     jwt_access_expire_time: process.env.JWT_ACCESS_EXPIRE_TIME,
     jwt_refresh_expire_time: process.env.JWT_REFRESH_EXPIRE_TIME, 
-
+    strip_key: process.env.STRIP_SECRET_KEY
 }
 
 

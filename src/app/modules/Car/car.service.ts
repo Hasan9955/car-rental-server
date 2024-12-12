@@ -9,12 +9,12 @@ import { Query } from "./car.controller";
 import { Types } from "mongoose";
 
 
-const getAllCars = async (payload: Query) => { 
-    
+const getAllCars = async (payload: Query) => {
+
     let unavailableCarIds: Types.ObjectId[] = [];
-    
+
     if (payload.date) {
-        const bookings = await Booking.find({ date: payload.date }); 
+        const bookings = await Booking.find({ date: payload.date });
         unavailableCarIds = bookings.map((booking) => booking.car);
     }
 
@@ -73,7 +73,6 @@ const returnCar = async (payload: {
     endTime: string;
 }) => {
     const id = payload.bookingId;
-    console.log(id);
 
     const isBookingExists = await Booking.findById(id)
         .populate('user')
@@ -82,6 +81,17 @@ const returnCar = async (payload: {
     if (!isBookingExists) {
         throw new AppError(httpStatus.NOT_FOUND, 'This booking id is not exists!')
     }
+
+    const bookingDate = new Date(isBookingExists.date);
+    const todayDate = new Date();
+
+    // make those date variables 00 time
+    bookingDate.setHours(0, 0, 0, 0);
+    todayDate.setHours(0, 0, 0, 0); 
+
+    // if (bookingDate > todayDate) {
+    //     throw new AppError(httpStatus.BAD_REQUEST, "You can't return the car for an upcoming date.");
+    // }
 
     const startTime = new Date(`1970-01-01T${isBookingExists.startTime}:00`)
 
@@ -98,6 +108,7 @@ const returnCar = async (payload: {
     const pricePerHour = (isBookingExists?.car as any)?.pricePerHour
     const totalCost = Number(((endHours - startHours) * pricePerHour).toFixed(2))
 
+
     const updateCarStatus = await Car.findByIdAndUpdate(
         isBookingExists.car._id,
         {
@@ -113,7 +124,8 @@ const returnCar = async (payload: {
         id,
         {
             endTime: payload?.endTime,
-            totalCost
+            totalCost,
+            status: 'UNPAID'
         },
         {
             new: true,

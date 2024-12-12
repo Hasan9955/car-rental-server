@@ -16,7 +16,8 @@ exports.carControllers = void 0;
 const catchAsync_1 = __importDefault(require("../../utility/catchAsync"));
 const car_service_1 = require("./car.service");
 const getAllCars = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield car_service_1.carServices.getAllCars();
+    const query = req.query;
+    const result = yield car_service_1.carServices.getAllCars(query);
     res.status(200).json({
         success: true,
         message: 'All Cars retrieved successfully.',

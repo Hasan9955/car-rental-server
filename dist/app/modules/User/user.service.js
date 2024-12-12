@@ -36,7 +36,7 @@ const createUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     };
     const accessToken = (0, auth_utils_1.createToken)(jwtPayload, config_1.default.jwt_access_secret, config_1.default.jwt_access_expire_time);
     const refreshToken = (0, auth_utils_1.createToken)(jwtPayload, config_1.default.jwt_refresh_secret, config_1.default.jwt_refresh_expire_time);
-    console.log(jwtPayload, accessToken, refreshToken);
+    // console.log(jwtPayload, accessToken, refreshToken);
     return {
         userData: result,
         accessToken,
