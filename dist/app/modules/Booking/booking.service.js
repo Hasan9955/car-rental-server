@@ -103,8 +103,8 @@ const createBooking = (payload, userId) => __awaiter(void 0, void 0, void 0, fun
     if (inputDate > oneYearFromToday) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'You can not set date bigger then 1 year!');
     }
-    const isBookingAlreadyExists = yield booking_model_1.Booking.findOne({ car: payload.car });
-    if ((isBookingAlreadyExists === null || isBookingAlreadyExists === void 0 ? void 0 : isBookingAlreadyExists.date) === payload.date) {
+    const isBookingAlreadyExists = yield booking_model_1.Booking.findOne({ car: payload.car, date: payload.date });
+    if (isBookingAlreadyExists) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'This car is already booked for requested day!');
     }
     const updateCarStatus = yield car_model_1.Car.findByIdAndUpdate(bookingData.car, {
