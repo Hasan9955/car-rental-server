@@ -15,13 +15,20 @@ const authValidator = (...requiredRole: TRole[]) => {
             throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!')
         }
 
-        const decodedToken = jwt.verify(
-            token,
-            config.jwt_access_secret as string
-        ) as JwtPayload;
+        // check if the token is valid 
+        // Here we use try-catch function for catch the error when jwt can't decode the token. Such as when the token time will expire!
+        let decodedToken;
+        try {
+            decodedToken = jwt.verify(
+                token,
+                config.jwt_access_secret as string
+            ) as JwtPayload;
+        } catch (error) {
+            throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!')
+        }
 
 
-        req.user = decodedToken; 
+        req.user = decodedToken;
         const { userEmail, role, iat } = decodedToken;
         const currentUser = await User.isUserExists(userEmail)
 
