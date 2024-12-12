@@ -17,11 +17,14 @@ app.use(cors({
   credentials: true
  }))
 
+
+ 
+
 //Access all of our application routes
 app.use('/api', router)
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Car swift server is running!')
 })
 
 app.use(globalErrorHandler);

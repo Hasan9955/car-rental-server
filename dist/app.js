@@ -20,7 +20,7 @@ app.use((0, cors_1.default)({
 //Access all of our application routes
 app.use('/api', routes_1.default);
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.send('Car swift server is running!');
 });
 app.use(globalErrorHandler_1.default);
 app.use(notFound_1.default);
